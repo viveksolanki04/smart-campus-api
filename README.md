@@ -273,14 +273,13 @@ Exposing stack traces can reveal internal details such as class structure, frame
 
 * Single room object
 
-#### 2.5 Delete Room with Sensors (Conflict Case)
+#### 2.5 Delete Room with Sensors (Normal Case)
 
 **DELETE** `http://localhost:8080/api/v1/rooms/LIB-301`
 
 **Expected:**
 
-* `409 Conflict`
-* JSON error (`ROOM_NOT_EMPTY`)
+* `204 No Content`
 
 ### 3. Part 3: Sensors & Filtering
 
@@ -424,7 +423,16 @@ Exposing stack traces can reveal internal details such as class structure, frame
 }
 ```
 
-#### 5.2 Add Reading to MAINTENANCE Sensor (Forbidden)
+#### 5.2 Delete Room with Sensors (Conflict Case)
+
+**DELETE** `http://localhost:8080/api/v1/rooms/CS-101`
+
+**Expected:**
+
+* `409 Conflict`
+* JSON error (`ROOM_NOT_EMPTY`)
+
+#### 5.3 Add Reading to MAINTENANCE Sensor (Forbidden)
 
 **POST** `http://localhost:8080/api/v1/sensors/OCC-999/readings`
 
@@ -441,7 +449,7 @@ Exposing stack traces can reveal internal details such as class structure, frame
 * `403 Forbidden`
 * JSON error response
 
-#### 5.3 Trigger 404 Error
+#### 5.4 Trigger 404 Error
 
 **GET** `http://localhost:8080/api/v1/rooms/INVALID-ID`
 
