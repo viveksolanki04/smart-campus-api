@@ -144,8 +144,6 @@ smart-campus-api/
 └── target/               (generated after build)
 ```
 
----
-
 ## Report Answers
 
 ### Part 1: Service Architecture & Setup
