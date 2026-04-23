@@ -203,6 +203,253 @@ Exposing stack traces can reveal internal details such as class structure, frame
 #### Question 3
 `ContainerRequestFilter` and `ContainerResponseFilter` enable centralised logging, maintain separation of concerns and avoid code duplication. This approach is more maintainable than adding logging logic in every resource method.
 
+## Postman Tests
+
+**Collection Name:** *Smart Campus API - Full Demonstration*
+
+### 1. Part 1: Setup & Discovery (Start of Video)
+
+#### 1.1 Discovery Endpoint
+
+**GET** `http://localhost:8080/api/v1`
+
+**Expected:**
+
+* Clean JSON response
+* Includes: name, version, contact, and resources map
+
+### 2. Part 2: Room Management
+
+#### 2.1 Create Room 1
+
+**POST** `http://localhost:8080/api/v1/rooms`
+
+**Body (JSON):**
+
+```json
+{
+  "id": "LIB-301",
+  "name": "Library Quiet Study",
+  "capacity": 50
+}
+```
+
+**Expected:**
+
+* `201 Created`
+* Room object returned
+
+#### 2.2 Create Room 2
+
+**POST** `http://localhost:8080/api/v1/rooms`
+
+**Body (JSON):**
+
+```json
+{
+  "id": "CS-101",
+  "name": "Computer Lab",
+  "capacity": 30
+}
+```
+
+**Expected:**
+
+* `201 Created`
+
+#### 2.3 List All Rooms
+
+**GET** `http://localhost:8080/api/v1/rooms`
+
+**Expected:**
+
+* Array containing both rooms
+
+#### 2.4 Get Single Room
+
+**GET** `http://localhost:8080/api/v1/rooms/LIB-301`
+
+**Expected:**
+
+* Single room object
+
+#### 2.5 Delete Room with Sensors (Conflict Case)
+
+**DELETE** `http://localhost:8080/api/v1/rooms/LIB-301`
+
+**Expected:**
+
+* `409 Conflict`
+* JSON error (`ROOM_NOT_EMPTY`)
+
+### 3. Part 3: Sensors & Filtering
+
+#### 3.1 Create Sensor (Valid Room)
+
+**POST** `http://localhost:8080/api/v1/sensors`
+
+**Body (JSON):**
+
+```json
+{
+  "id": "TEMP-001",
+  "type": "Temperature",
+  "status": "ACTIVE",
+  "currentValue": 22.5,
+  "roomId": "LIB-301"
+}
+```
+
+**Expected:**
+
+* `201 Created`
+
+#### 3.2 Create Sensor (Invalid Room)
+
+**POST** `http://localhost:8080/api/v1/sensors`
+
+**Body (JSON):**
+
+```json
+{
+  "id": "BAD-001",
+  "type": "Temperature",
+  "status": "ACTIVE",
+  "currentValue": 20,
+  "roomId": "NON-EXISTENT"
+}
+```
+
+**Expected:**
+
+* `422 Unprocessable Entity`
+* JSON error response
+
+#### 3.3 List All Sensors
+
+**GET** `http://localhost:8080/api/v1/sensors`
+
+#### 3.4 Filter Sensors by Type
+
+**GET** `http://localhost:8080/api/v1/sensors?type=Temperature`
+
+**Expected:**
+
+* Only Temperature sensors returned
+
+#### 3.5 Delete Sensor
+
+**DELETE** `http://localhost:8080/api/v1/sensors/TEMP-001`
+
+#### 3.6 Delete Room (Now Successful)
+
+**DELETE** `http://localhost:8080/api/v1/rooms/LIB-301`
+
+**Expected:**
+
+* `204 No Content`
+
+### 4. Part 4: Sub-Resources (Readings)
+
+#### 4.1 Create Sensor for Readings
+
+**POST** `http://localhost:8080/api/v1/sensors`
+
+**Body (JSON):**
+
+```json
+{
+  "id": "TEMP-002",
+  "type": "Temperature",
+  "status": "ACTIVE",
+  "currentValue": 23.0,
+  "roomId": "CS-101"
+}
+```
+
+#### 4.2 Add First Reading
+
+**POST** `http://localhost:8080/api/v1/sensors/TEMP-002/readings`
+
+**Body (JSON):**
+
+```json
+{
+  "value": 24.5
+}
+```
+
+**Expected:**
+
+* `201 Created`
+* Reading object returned
+
+#### 4.3 Add Second Reading
+
+**POST** `http://localhost:8080/api/v1/sensors/TEMP-002/readings`
+
+**Body (JSON):**
+
+```json
+{
+  "value": 25.1
+}
+```
+
+---
+
+#### 4.4 Get Sensor Readings History
+
+**GET** `http://localhost:8080/api/v1/sensors/TEMP-002/readings`
+
+**Expected:**
+
+* Array with 2 readings
+
+### 5. Part 5: Error Handling & Logging
+
+#### 5.1 Create MAINTENANCE Sensor
+
+**POST** `http://localhost:8080/api/v1/sensors`
+
+**Body (JSON):**
+
+```json
+{
+  "id": "OCC-999",
+  "type": "Occupancy",
+  "status": "MAINTENANCE",
+  "currentValue": 0,
+  "roomId": "CS-101"
+}
+```
+
+#### 5.2 Add Reading to MAINTENANCE Sensor (Forbidden)
+
+**POST** `http://localhost:8080/api/v1/sensors/OCC-999/readings`
+
+**Body (JSON):**
+
+```json
+{
+  "value": 10
+}
+```
+
+**Expected:**
+
+* `403 Forbidden`
+* JSON error response
+
+#### 5.3 Trigger 404 Error
+
+**GET** `http://localhost:8080/api/v1/rooms/INVALID-ID`
+
+**Expected:**
+
+* `404 Not Found`
+* Demonstrates exception mapper
+
 ## Video Demonstration
 
 A **10-minute video demonstration** has been recorded and submitted via Blackboard.
