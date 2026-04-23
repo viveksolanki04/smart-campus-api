@@ -273,7 +273,7 @@ Exposing stack traces can reveal internal details such as class structure, frame
 
 * Single room object
 
-#### 2.5 Delete Room with Sensors (Normal Case)
+#### 2.5 Delete Room without Sensors (Normal Case)
 
 **DELETE** `http://localhost:8080/api/v1/rooms/LIB-301`
 
