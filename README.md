@@ -207,7 +207,7 @@ Exposing stack traces can reveal internal details such as class structure, frame
 
 **Collection Name:** *Smart Campus API - Full Demonstration*
 
-### 1. Part 1: Setup & Discovery (Start of Video)
+### 1. Part 1: Setup & Discovery
 
 #### 1.1 Discovery Endpoint
 
@@ -216,7 +216,7 @@ Exposing stack traces can reveal internal details such as class structure, frame
 **Expected:**
 
 * Clean JSON response
-* Includes: name, version, contact, and resources map
+* Includes: name, version, contact and resources map
 
 ### 2. Part 2: Room Management
 
