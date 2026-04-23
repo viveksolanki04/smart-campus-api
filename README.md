@@ -146,11 +146,64 @@ smart-campus-api/
 
 ---
 
-## Report / Coursework Submission
+## Report Answers
 
-Detailed answers to all assignment questions are provided in the **separate Report PDF** submitted via Blackboard.
+### Part 1: Service Architecture & Setup
 
-> This README focuses only on setup and API usage as required.
+#### Question 1
+The default lifecycle of JAX-RS (e.g. Jersey) is **per-request**, meaning a new resource instance is created for each HTTP request. Sub-resources follow the same behaviour unless explicitly configured (e.g., `@Singleton`).
+
+As a result, instance variables cannot store shared state. In this project, shared data is stored in static structures within `DataStore`. In a real-world system, thread-safe structures such as `ConcurrentHashMap` or proper synchronisation would be required to prevent race conditions.
+
+#### Question 2
+HATEOAS allows APIs to include navigational links in responses, making them self-discoverable.
+
+**Key benefits:**
+- Reduces client-server coupling (no hardcoded URLs)
+- Supports API evolution without breaking clients
+- Provides contextual navigation
+
+A basic implementation of this principle is demonstrated by the Discovery endpoint.
+
+### Part 2: Room Management
+
+#### Question 1
+Returning only IDs reduces payload size but introduces additional requests (N+1 problem). Returning full objects increases payload size but improves usability.
+
+This API returns full `Room` objects due to the small dataset and to simplify client interaction. For larger datasets, pagination would be recommended.
+
+#### Question 2
+DELETE is idempotent in this API. The first request removes the resource (204 No Content), while subsequent requests return 404 Not Found. The system state remains unchanged after the initial deletion.
+
+### Part 3: Sensor Operations & Linking
+
+#### Question 1
+The `@Consumes(MediaType.APPLICATION_JSON)` annotation ensures that the endpoint only accepts JSON input. Requests with other formats are automatically rejected with **415 Unsupported Media Type**, preventing invalid processing.
+
+#### Question 2
+Query parameters (e.g., `/sensors?type=CO2`) are preferred for filtering because they are optional, flexible and support multiple criteria.
+
+Path parameters are better suited for identifying specific resources (e.g., `/sensors/{id}`).
+
+### Part 4: Deep Nesting with Sub-Resources
+
+#### Question
+The Sub-Resource Locator pattern improves API design by enabling clear separation of concerns. In this implementation, `SensorResource` delegates reading-related operations to a dedicated `SensorReadingResource`, ensuring each class has a focused responsibility.
+
+This structure enhances readability and maintainability by avoiding large, monolithic resource classes. Instead of handling all nested paths (e.g., `/sensors/{id}/readings/{rid}`) in one place, logic is distributed across smaller, specialised components.
+
+As a result, the codebase becomes easier to test, extend and manage. This approach is particularly useful for large-scale APIs with deep resource hierarchies, where modularity and reusability are essential.
+
+### Part 5: Advanced Error Handling, Exception Mapping & Logging
+
+#### Question 1
+HTTP 422 is more appropriate when the request is valid but contains invalid data (e.g., a non-existent `roomId`). In contrast, 404 indicates that the requested resource does not exist.
+
+#### Question 2
+Exposing stack traces can reveal internal details such as class structure, framework versions and file paths. This creates security risks (CWE-209). The API prevents this by using a generic exception mapper.
+
+#### Question 3
+`ContainerRequestFilter` and `ContainerResponseFilter` enable centralised logging, maintain separation of concerns and avoid code duplication. This approach is more maintainable than adding logging logic in every resource method.
 
 ## Video Demonstration
 
