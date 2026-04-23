@@ -3,8 +3,6 @@
 A RESTful Sensor & Room Management API built with **JAX-RS (Jersey)** and an embedded Grizzly server for the University of Westminster module
 **5COSC022W – Client-Server Architectures (2025/26)**.
 
----
-
 ## Overview
 
 This API manages **Rooms** and **Sensors** on a university campus. It supports:
@@ -23,8 +21,6 @@ The API strictly follows REST principles and uses only in-memory data structures
 http://localhost:8080/api/v1
 ```
 
----
-
 ## Technologies Used
 
 * Java 17
@@ -34,8 +30,6 @@ http://localhost:8080/api/v1
 * Jackson (JSON processing)
 
 > No databases, no Spring Boot, no external frameworks - JAX-RS as per the requirements.
-
----
 
 ## How to Build and Run
 
@@ -58,8 +52,6 @@ mvn clean compile exec:java
 Smart Campus API started at http://localhost:8080/api/v1
 ```
 
----
-
 ## API Endpoints
 
 ### 1. Discovery
@@ -70,8 +62,6 @@ GET /api/v1
 
 Returns API metadata and available resource links.
 
----
-
 ### 2. Rooms
 
 ```
@@ -80,8 +70,6 @@ POST   /api/v1/rooms        → Create a new room
 GET    /api/v1/rooms/{id}   → Get room by ID
 DELETE /api/v1/rooms/{id}   → Delete room (blocked if sensors assigned)
 ```
-
----
 
 ### 3. Sensors
 
@@ -92,16 +80,12 @@ GET    /api/v1/sensors/{id}        → Get sensor
 DELETE /api/v1/sensors/{id}        → Delete sensor
 ```
 
----
-
 ### 4. Sensor Readings (Sub-resource)
 
 ```
 GET  /api/v1/sensors/{id}/readings → Get reading history
 POST /api/v1/sensors/{id}/readings → Add new reading (updates currentValue)
 ```
-
----
 
 ## Sample cURL Commands
 
@@ -141,8 +125,6 @@ curl -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings \
   -d '{"value":23.8}'
 ```
 
----
-
 ## Project Structure
 
 ```
@@ -170,8 +152,6 @@ Detailed answers to all assignment questions are provided in the **separate Repo
 
 > This README focuses only on setup and API usage as required.
 
----
-
 ## Video Demonstration
 
 A **10-minute video demonstration** has been recorded and submitted via Blackboard.
@@ -182,17 +162,13 @@ The video includes:
 * Successful CRUD operations
 * Error handling scenarios (409, 422, 403, 500)
 
----
-
 ## Repository
 
 GitHub:
 [https://github.com/viveksolanki04/smart-campus-api](https://github.com/viveksolanki04/smart-campus-api)
 
----
-
 ## Author
 
 **Vivek Solanki**
-Module: *5COSC022W – Client-Server Architectures*
+Module: *5COSC022W - Client-Server Architectures*
 University of Westminster
