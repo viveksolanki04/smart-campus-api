@@ -475,6 +475,7 @@ GitHub:
 
 ## Author
 
-**Vivek Solanki**  
+**Vivek Solanki** 
+**W2038271**
 Module: *5COSC022W - Client-Server Architectures*  
 University of Westminster
